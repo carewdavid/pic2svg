@@ -1,0 +1,6 @@
+[package]
+name = "pic2svg"
+version = "0.1.0"
+authors = ["david <carew124@gmail.com>"]
+
+[dependencies]
