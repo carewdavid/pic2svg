@@ -1,0 +1,3 @@
+WHITESPACE = _{ " " | "\n" }
+pic = { ".PS" ~ element ~ ".PE" }
+element = { "box" }
