@@ -1,3 +1,6 @@
 WHITESPACE = _{ " " | "\n" }
-pic = { ".PS" ~ element ~ ".PE" }
-element = { "box" }
+pic = { ".PS\n" ~ (primitive ~ (";" | NEWLINE))+ ~ ".PE" }
+primitive = { (rect | circle | ellipse | "") }
+rect = { "box" }
+circle = { "circle" }
+ellipse = { "ellipse" }

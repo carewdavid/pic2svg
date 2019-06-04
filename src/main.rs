@@ -6,6 +6,7 @@ extern crate pest;
 #[macro_use]
 extern crate pest_derive;
 use pest::Parser;
+use pest::iterators::Pair;
 #[derive(Parser)]
 #[grammar = "pic.pest"]
 pub struct PicParser;
@@ -20,7 +21,23 @@ fn emit_footer(){
 }
 
 fn emit_box() {
-    println!("<rect width=\"0.75in\" height=\"0.5in\" fill=\"none\" stroke=\"black\"/>");
+    println!(r#"<rect width="0.75in" height="0.5in" fill="none" stroke="black"/>"#);
+}
+
+fn emit_circle() {
+    println!(r#"<circle r="0.25in" fill="none" stroke="black"/>"#);
+}
+
+fn emit_ellipse() {
+    println!(r#"<ellipse rx="0.375in" ry="0.25in" fill="none" stroke="black"/>"#);
+}
+fn emit_primitive(primitive: Pair<Rule>){
+    match primitive.as_rule() {
+        Rule::rect => emit_box(),
+        Rule::circle => emit_circle(),
+        Rule::ellipse => emit_ellipse(),
+        _ => unreachable!()
+    }
 }
 
 fn main() {
@@ -33,9 +50,9 @@ fn main() {
     emit_header();
     for elem in program.into_inner() {
         match elem.as_rule() {
-            Rule::element => {
+            Rule::primitive => {
                 println!("<!--{}-->", elem.as_str());
-                emit_box();
+                emit_primitive(elem.into_inner().next().unwrap());
             },
             _ => panic!()
         }
