@@ -1,6 +1,13 @@
 WHITESPACE = _{ " " | "\n" }
-pic = { ".PS\n" ~ (primitive ~ (";" | NEWLINE))+ ~ ".PE" }
-primitive = { (rect | circle | ellipse | "") }
+pic = { ".PS\n" ~ ((primitive | command) ~ (";" | NEWLINE))+ ~ ".PE" }
+primitive = { (rect | circle | ellipse) }
 rect = { "box" }
 circle = { "circle" }
 ellipse = { "ellipse" }
+
+command = { movement | left | right | down | up }
+movement = { "move" }
+left = { "left" }
+right = { "right" }
+down = { "down" }
+up = { "up" }
