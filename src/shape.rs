@@ -1,5 +1,6 @@
 
-pub struct Point (f32, f32);
+#[derive(Copy, Clone)]
+pub struct Point (pub f32, pub f32);
 
 impl Point {
     fn distance(&self, p: &Point) -> f32 {
@@ -22,9 +23,9 @@ pub struct Rect {
 
 
 impl Rect {
-    pub fn new(x: f32, y: f32) -> Rect {
+    pub fn new(position: Point) -> Rect {
         Rect {
-            center: Point(x, y),
+            center: position,
             width: 0.75,
             height: 0.5
         }
@@ -48,9 +49,9 @@ pub struct Ellipse {
 }
 
 impl Ellipse {
-    pub fn new(x: f32, y: f32) -> Ellipse{
+    pub fn new(position: Point) -> Ellipse{
         Ellipse {
-            center: Point(x, y),
+            center: position,
             width: 0.375,
             height: 0.25
         }
@@ -70,9 +71,9 @@ pub struct Circle {
 }
 
 impl Circle {
-    pub fn new(x: f32, y: f32) -> Circle {
+    pub fn new(position: Point) -> Circle {
         Circle {
-            center: Point(x, y),
+            center: position,
             radius: 0.25
         }
     }

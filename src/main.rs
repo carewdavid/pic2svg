@@ -23,8 +23,7 @@ enum Direction {
 
 struct Pic {
     direction: Direction,
-    x: f32,
-    y: f32,
+    here: Point,
     move_distance: f32,
     objects: Vec<Box<Primitive>>
 }
@@ -33,24 +32,24 @@ impl Pic {
     fn new() -> Pic {
         Pic {
             direction: Direction::Right,
-            x: 0.0,
-            y: 0.0,
+            here: Point(0.0, 0.0),
             move_distance: 0.5,
             objects: Vec::new()
         }
     }
 
     fn move_point(&mut self) {
+        let Point(x, y) = self.here;
         match self.direction {
-            Direction::Left => self.x -= self.move_distance,
-            Direction::Right => self.x += self.move_distance,
-            Direction::Up => self.y -= self.move_distance,
-            Direction::Down => self.y += self.move_distance,
+            Direction::Left => self.here = Point(x - self.move_distance, y),
+            Direction::Right => self.here = Point(x + self.move_distance, y),
+            Direction::Down => self.here = Point(x, y + self.move_distance),
+            Direction::Up => self.here = Point(x, y - self.move_distance),
         }
     }
 
-    fn current_location(&self) -> (f32, f32) {
-        (self.x, self.y)
+    fn current_location(&self) -> Point {
+        self.here
     }
 
     fn emit(&self) {
@@ -86,12 +85,11 @@ fn emit_ellipse(x: f32, y: f32) {
 }
 fn emit_primitive(pic: &mut Pic, primitive: Pair<Rule>){
     //Location for the next object to be placed
-    let x = pic.x;
-    let y = pic.y;
+    let here = pic.here;
     match primitive.as_rule() {
-        Rule::rect => pic.add_object(Box::new(Rect::new(x, y))),
-        Rule::circle => pic.add_object(Box::new(Circle::new(x, y))),
-        Rule::ellipse => pic.add_object(Box::new(Ellipse::new(x, y))),
+        Rule::rect => pic.add_object(Box::new(Rect::new(here))),
+        Rule::circle => pic.add_object(Box::new(Circle::new(here))),
+        Rule::ellipse => pic.add_object(Box::new(Ellipse::new(here))),
         _ => unreachable!()
     }
     pic.move_point();
