@@ -72,17 +72,6 @@ fn emit_footer(){
     println!("</svg>");
 }
 
-fn emit_box(x: f32, y:f32) {
-    println!(r#"<rect x="{}in" y="{}in" width="0.75in" height="0.5in" fill="none" stroke="black"/>"#, x, y);
-}
-
-fn emit_circle(x: f32, y: f32) {
-    println!(r#"<circle cx="{}in" cy="{}in" r="0.25in" fill="none" stroke="black"/>"#, x, y);
-}
-
-fn emit_ellipse(x: f32, y: f32) {
-    println!(r#"<ellipse cx="{}in" cy="{}in" rx="0.375in" ry="0.25in" fill="none" stroke="black"/>"#, x, y);
-}
 fn emit_primitive(pic: &mut Pic, primitive: Pair<Rule>){
     //Location for the next object to be placed
     let here = pic.here;
