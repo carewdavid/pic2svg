@@ -13,7 +13,12 @@ impl Point {
 
 pub trait Primitive {
     fn emit(&self);
+    fn set_location(&mut self, loc: Point);
 
+    //Technically, we don't know what fields each primitive has, so can't
+    //provide a default implementation even though it's going to be the same
+    //for most of them. Fml.
+    fn center(&self) -> Point;
     fn north(&self) -> Point;
     fn east(&self) -> Point;
     fn south(&self) -> Point;
@@ -44,6 +49,14 @@ impl Primitive for Rect {
         let cornerx = x - (self.width / 2.0);
         let cornery = y - (self.height / 2.0);
         println!(r#"<rect x="{}in" y="{}in" width="0.75in" height="0.5in" fill="none" stroke="black"/>"#, cornerx, cornery);
+    }
+
+    fn set_location(&mut self, loc: Point) {
+        self.center = loc;
+    }
+
+    fn center(&self) -> Point {
+        self.center
     }
 
     fn north(&self) -> Point {
@@ -89,6 +102,14 @@ impl Primitive for Ellipse {
         let Point(x, y) = self.center;
         println!(r#"<ellipse cx="{}in" cy="{}in" rx="{}in" ry="{}in" fill="none" stroke="black"/>"#, x, y, self.width, self.height);
     }
+    fn set_location(&mut self, loc: Point) {
+        self.center = loc;
+    }
+
+    fn center(&self) -> Point {
+        self.center
+    }
+
     fn north(&self) -> Point {
         let Point(x, y) = self.center;
         Point(x, y - self.height)
@@ -127,6 +148,14 @@ impl Primitive for Circle {
     fn emit(&self) {
         let Point(x, y) = self.center;
         println!(r#"<circle cx="{}in" cy="{}in" r="{}in" fill="none" stroke="black"/>"#, x, y, self.radius);
+    }
+
+    fn set_location(&mut self, loc: Point) {
+        self.center = loc;
+    }
+
+    fn center(&self) -> Point {
+        self.center
     }
 
     fn north(&self) -> Point {
