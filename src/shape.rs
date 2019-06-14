@@ -3,9 +3,9 @@
 pub struct Point (pub f32, pub f32);
 
 impl Point {
-    fn distance(&self, p: &Point) -> f32 {
-        let dx = self.0 - p.0;
-        let dy = self.1 - p.1;
+    pub fn distance(p0: Point, p1: Point) -> f32 {
+        let dx = p0.0 - p1.0;
+        let dy = p0.1 - p1.1;
         f32::sqrt(dx * dx + dy * dy)
     }
 
