@@ -58,9 +58,35 @@ impl Pic {
         }
     }
 
-    fn add_object(&mut self, obj: Box<Primitive>) {
+    //Add a primitive object to the image.
+    //Places said object adjacent to the previous one (if it exists)
+    fn place_object(&mut self, mut obj: Box<Primitive>){
+        //Get the point for the next object to connect to. We need to save it here
+        //so it's not affected by direction changes.
+        self.here = match self.direction {
+            Direction::Left => {
+                let offset = Point::distance(obj.center(), obj.east());
+                obj.set_location(Point(self.here.0 - offset, self.here.1));
+                obj.west()
+            },
+            Direction::Right => {
+                let offset = Point::distance(obj.center(), obj.west());
+                obj.set_location(Point(self.here.0 + offset, self.here.1));
+                obj.east()
+            }, 
+            Direction::Down => {
+                let offset = Point::distance(obj.center(), obj.north());
+                obj.set_location(Point(self.here.0, self.here.1 + offset));
+                obj.south()
+            }, 
+            Direction::Up => {
+                let offset = Point::distance(obj.center(), obj.south());
+                obj.set_location(Point(self.here.0, self.here.1 - offset));
+                obj.north()
+            } 
+        };
         self.objects.push(obj);
-    }
+    } 
 }
 
 fn emit_header() {
@@ -76,12 +102,11 @@ fn emit_primitive(pic: &mut Pic, primitive: Pair<Rule>){
     //Location for the next object to be placed
     let here = pic.here;
     match primitive.as_rule() {
-        Rule::rect => pic.add_object(Box::new(Rect::new(here))),
-        Rule::circle => pic.add_object(Box::new(Circle::new(here))),
-        Rule::ellipse => pic.add_object(Box::new(Ellipse::new(here))),
+        Rule::rect => pic.place_object(Box::new(Rect::new(here))),
+        Rule::circle => pic.place_object(Box::new(Circle::new(here))),
+        Rule::ellipse => pic.place_object(Box::new(Ellipse::new(here))),
         _ => unreachable!()
     }
-    pic.move_point();
 }
 
 fn do_command(pic: &mut Pic, command: Pair<Rule>) {
