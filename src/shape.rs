@@ -194,3 +194,84 @@ impl Primitive for Circle {
         Point(x - self.radius, y)
     }
 }
+
+pub struct Line {
+    start: Point,
+    end: Point
+}
+
+impl Line {
+    pub fn new(start: Point, dir: Direction) -> Line {
+        //The default length for lines is 0.5in
+        let length = 0.5;
+        let end = match dir {
+            Direction::Left => Point::add(start, Point(-length, 0.0)),
+            Direction::Right => Point::add(start, Point(length, 0.0)),
+            Direction::Down => Point::add(start, Point(0.0, length)),
+            Direction::Up => Point::add(start, Point(0.0, -length))
+        };
+        Line { start: start, end: end}
+    }
+}
+
+impl Primitive for Line {
+    fn emit(&self) {
+        //These names are a little inconsistent with coordinate names elsewhere, but they're
+        //the ones svg uses.
+        let Point(x1, y1) = self.start;
+        let Point(x2, y2) = self.end;
+        println!(r#"<line x1="{}in" y1="{}in" x2="{}in" y2="{}in" stroke="black"/>"#, x1, y1, x2, y2);
+    }
+
+    //Move the start point of the line to loc
+    fn set_location(&mut self, loc: Point) {
+        //Get the vector from the initial start point to the new one...
+        let offset = Point::sub(loc, self.start);
+        self.start = loc; //Point::add(self.start, offset);
+        //and use it to put the end point in the right place too.
+        self.start = Point::add(self.end, offset);
+    }
+            
+    fn center(&self) -> Point {
+        let Point(x0, y0) = self.start;
+        let Point(x1, y1) = self.end;
+        Point((x0 + x1) / 2.0, (y0 + y1) / 2.0)
+    }
+    
+    //None of the specifications for Pic I can find say what these mean for lines
+    //Fortunately, real groff seems to just use whichever endpoint is farthest in the
+    //relevant direction, which is easy enough
+    fn north(&self) -> Point {
+        if self.start.1 < self.end.1 {
+            self.start
+        }else{
+            self.end
+        }
+    }
+
+    fn south(&self) -> Point {
+        if self.start.1 > self.end.1 {
+            self.start
+        }else{
+            self.end
+        }
+    }
+
+    fn east(&self) -> Point {
+        if self.start.0 > self.start.1 {
+            self.end
+        }else{
+            self.start
+        }
+    }
+        
+    fn west(&self) -> Point {
+        if self.start.0 < self.start.1 {
+            self.end
+        }else{
+            self.start
+        }
+    }
+}
+        
+        

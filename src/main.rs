@@ -94,10 +94,12 @@ fn emit_footer(){
 fn emit_primitive(pic: &mut Pic, primitive: Pair<Rule>){
     //Location for the next object to be placed
     let here = pic.here;
+    let dir = pic.direction;
     match primitive.as_rule() {
         Rule::rect => pic.place_object(Box::new(Rect::new(here))),
         Rule::circle => pic.place_object(Box::new(Circle::new(here))),
         Rule::ellipse => pic.place_object(Box::new(Ellipse::new(here))),
+        Rule::line => pic.place_object(Box::new(Line::new(here, dir))),
         _ => unreachable!()
     }
 }
