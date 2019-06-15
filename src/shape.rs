@@ -9,6 +9,16 @@ impl Point {
         f32::sqrt(dx * dx + dy * dy)
     }
 
+    pub fn add(p0: Point, p1: Point) -> Point {
+        Point(p0.0 + p1.0, p0.1 + p1.1)
+    }
+
+    pub fn sub(p0: Point, p1: Point) -> Point {
+        Point(p0.0 - p1.0, p0.1 - p1.1)
+    }
+
+}
+
 pub enum Direction {
     Left,
     Right,
