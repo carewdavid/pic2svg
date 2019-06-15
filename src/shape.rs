@@ -17,6 +17,10 @@ impl Point {
         Point(p0.0 - p1.0, p0.1 - p1.1)
     }
 
+    pub fn mul(p: Point, scalar: f32) -> Point {
+        Point(p.0 * scalar, p.1 * scalar)
+    }
+
 }
 
 #[derive(Copy, Clone)]
