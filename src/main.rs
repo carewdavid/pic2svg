@@ -14,13 +14,6 @@ pub struct PicParser;
 mod shape;
 use shape::*;
 
-enum Direction {
-    Left,
-    Right,
-    Up,
-    Down
-}
-
 struct Pic {
     direction: Direction,
     here: Point,

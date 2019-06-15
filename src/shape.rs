@@ -9,6 +9,11 @@ impl Point {
         f32::sqrt(dx * dx + dy * dy)
     }
 
+pub enum Direction {
+    Left,
+    Right,
+    Up,
+    Down
 }
 
 pub trait Primitive {
