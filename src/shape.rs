@@ -208,6 +208,7 @@ impl Line {
     pub fn new(start: Point, dir: Direction) -> Line {
         //The default length for lines is 0.5in
         let length = 0.5;
+            
         let end = match dir {
             Direction::Left => Point::add(start, Point(-length, 0.0)),
             Direction::Right => Point::add(start, Point(length, 0.0)),
@@ -229,11 +230,15 @@ impl Primitive for Line {
 
     //Move the start point of the line to loc
     fn set_location(&mut self, loc: Point) {
-        //Get the vector from the initial start point to the new one...
-        let offset = Point::sub(loc, self.start);
-        self.start = loc; //Point::add(self.start, offset);
-        //and use it to put the end point in the right place too.
-        self.start = Point::add(self.end, offset);
+        //Calling code expects loc to be the center of the figure
+        let center = Point::mul(Point::add(self.start, self.end), 0.5);
+
+        //Get the vector from the initial point to the new one...
+        let offset = Point::sub(loc, center);
+
+        //and use it to move the ends to the right place
+        self.start = Point::add(self.start, offset);
+        self.end = Point::add(self.end, offset);
     }
             
     fn center(&self) -> Point {
