@@ -307,7 +307,8 @@ impl Primitive for Arrow {
         //Scale to 1/8in
         let back = Point::mul(back, 0.125);
 
-        let angle = 5.0;
+        //~15 degrees. Trig functions take radians
+        let angle = 0.26;
 
         let left = Point::add(self.shaft.end, Point(back.0 * f32::cos(-angle) - back.1 * f32::sin(-angle),
                          back.0 * f32::sin(-angle) + back.1 * f32::cos(-angle)));
