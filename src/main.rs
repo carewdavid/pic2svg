@@ -100,6 +100,7 @@ fn emit_primitive(pic: &mut Pic, primitive: Pair<Rule>){
         Rule::circle => pic.place_object(Box::new(Circle::new(here))),
         Rule::ellipse => pic.place_object(Box::new(Ellipse::new(here))),
         Rule::line => pic.place_object(Box::new(Line::new(here, dir))),
+        Rule::arrow => pic.place_object(Box::new(Arrow::new(here, dir))),
         _ => unreachable!()
     }
 }

@@ -1,10 +1,11 @@
 WHITESPACE = _{ " " | "\n" }
 pic = { ".PS\n" ~ ((primitive | command) ~ (";" | NEWLINE))+ ~ ".PE" }
-primitive = { (rect | circle | ellipse | line) }
+primitive = { (rect | circle | ellipse | line | arrow) }
 rect = { "box" }
 circle = { "circle" }
 ellipse = { "ellipse" }
 line = { "line" }
+arrow = { "arrow" }
 
 command = { movement | left | right | down | up }
 movement = { "move" }

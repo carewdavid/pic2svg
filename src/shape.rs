@@ -277,5 +277,68 @@ impl Primitive for Line {
         }
     }
 }
+
+//This one is just a wrapper around line. It's the same thing, just with a triangle at the end
+pub struct Arrow {
+    shaft: Line
+}
+
+impl Arrow {
+    pub fn new(start: Point, dir: Direction) -> Arrow {
+        Arrow{
+            shaft: Line::new(start, dir)
+        }
+    }
+}
+
+impl Primitive for Arrow {
+    fn emit(&self) {
+        //Make the head of the arrow
+
+        //Get a normal vector pointing from the end of the arrow to the start
+        let back = Point::sub(self.shaft.start, self.shaft.end);
+        let magnitude = Point::distance(Point(0.0,0.0), back);
+        let back = Point::mul(back, 1.0 / magnitude);
+        //Scale to 1/8in
+        let back = Point::mul(back, 0.125);
+
+        let angle = 5.0;
+
+        let left = Point::add(self.shaft.end, Point(back.0 * f32::cos(-angle) - back.1 * f32::sin(-angle),
+                         back.0 * f32::sin(-angle) + back.1 * f32::cos(-angle)));
+        let right = Point::add(self.shaft.end, Point(back.0 * f32::cos(angle) - back.1 * f32::sin(angle),
+                         back.0 * f32::sin(angle) + back.1 * f32::cos(angle)));
         
-        
+        self.shaft.emit();
+        //You can't specify units in the polygon points, so put the arrowhead
+        //in a group and scale it
+        println!("<g transform=\"scale(96, 96)\">");
+        println!(r#"<polygon points="{},{} {},{} {},{}" fill="black" />"#, self.shaft.end.0, self.shaft.end.1, left.0, left.1, right.0, right.1);
+        println!("</g>");
+    }
+
+    //All these functions are just going to forward to the ones on the internal line
+    fn set_location(&mut self, center: Point) {
+        self.shaft.set_location(center);
+    }
+
+    fn center(&self) -> Point {
+        self.shaft.center()
+    }
+
+    fn north(&self) -> Point {
+        self.shaft.north()
+    }
+    
+    fn south(&self) -> Point {
+        self.shaft.south()
+    }
+
+    fn east(&self) -> Point {
+        self.shaft.east()
+    }
+
+    fn west(&self) -> Point {
+        self.shaft.west()
+    }
+}
