@@ -133,7 +133,7 @@ fn main() {
                 emit_primitive(&mut pic, elem.into_inner().next().unwrap());
             },
             Rule::command => do_command(&mut pic, elem.into_inner().next().unwrap()),
-            _ => panic!()
+            _ => ()
         }
     }
     pic.emit();

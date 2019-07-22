@@ -1,5 +1,6 @@
-WHITESPACE = _{ " " | "\n" }
-pic = { ".PS\n" ~ ((primitive | command) ~ (";" | NEWLINE))+ ~ ".PE" }
+WHITESPACE = _{ " " }
+separator = { NEWLINE | ";" }
+pic = { ".PS\n" ~ ((primitive | command) ~ separator+ )+ ~ ".PE" }
 primitive = { (rect | circle | ellipse | line | arrow) }
 rect = { "box" }
 circle = { "circle" }
